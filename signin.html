@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - FlickFusion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="logo.png"></div>
+        <div class="header-right"><input type="text" placeholder="Find movie"></div>
+        <button class="btn-signin"><a href="index.html">Home</a></button>
+    </header>
+
+    <main class="form-page">
+        <div class="auth-container">
+            <h2>Sign In</h2>
+            <form id="signInForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+                
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="Quick-links">Quick Links
+            <a href="about.html">About Us</a>
+        </div>
+        <div class="social-links">Social Links
+            <a href="https://www.instagram.com/flick_fusion2025?utm_source=qr&igsh=bXlqdjc3a3g5Nnd2">Instagram</a>
+        </div>
+        <p>&copy; 2020 FlickFusion.All rights reserved</p>
+    </footer>
+
+    <script>
+        document.getElementById('signInForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                alert('Please enter both a username and password.');
+                return;
+            }
+
+            const dataToSend = { username, password };
+            const bodyData = new URLSearchParams(dataToSend).toString();
+
+            fetch('http://localhost:3000/api/signin', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: bodyData
+            })
+            .then(response => {
+                if (response.ok) {
+                   
+                    localStorage.setItem('signedInUser', username);
+                    
+                    localStorage.removeItem('signedInUserPassword'); 
+                    return response.json(); 
+                } 
+                
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Authentication failed.');
+                });
+            })
+            .then(data => {
+               
+                alert(data.message); 
+                window.location.href = 'index.html';
+            })
+            .catch(error => {
+                console.error('Authentication error:', error);
+                alert('Authentication Failed: ' + error.message);
+            });
+        });
+    </script>
+</body>
+</html>

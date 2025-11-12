@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <title>Booking - FlickFusion</title>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="logo.png"></div>
+        <div class="header-right"><input type="text" placeholder="Find movie"></div>
+        <button class="btn-signin"><a href="index.html">Home</a></button>
+    </header>
+
+    <main class="booking-page-content">
+        <h1 id="movieTitle">Seat Selection</h1>
+        
+        
+
+            <ul class="showcase">
+                <li><div class="seat"></div> <small>Available</small></li>
+                <li><div class="seat selected"></div> <small>Selected</small></li>
+                <li><div class="seat occupied"></div> <small>Occupied</small></li>
+            </ul>
+
+            <div class="screen"></div>
+
+            <div class="container seats-grid" id="seatContainer">
+                </div>
+
+            <p class="text">
+                You have selected <span id="count">0</span> seats for a total of ₹<span id="total">0</span> (Price: ₹<span id="ticketPriceDisplay">0</span>)
+            </p>
+
+            <button class="book-btn" id="bookBtn">Book Tickets</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="Quick-links">Quick Links
+            <a href="about.html">About Us</a>
+        </div>
+        <div class="social-links">Social Links
+            <a href="https://www.instagram.com/flick_fusion2025?utm_source=qr&igsh=bXlqdjc3a3g5Nnd2">Instagram</a>
+        </div>
+        <p>&copy; 2020 FlickFusion.All rights reserved</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieName = decodeURIComponent(urlParams.get('movie')) || 'Selected Movie'; 
+            const price = urlParams.get('price');
+            const movieTime = decodeURIComponent(urlParams.get('time')); 
+            const signedInUser = localStorage.getItem('signedInUser');
+
+            
+            if (!movieTime) {
+                alert('Screening time not selected. Returning to selection page.');
+                window.location.href = `timings.html?movie=${encodeURIComponent(movieName)}&price=${price}`;
+                return;
+            }
+
+            if (!signedInUser) {
+                alert('Please sign in to book tickets.');
+                window.location.href = 'signin.html';
+                return;
+            }
+            
+           
+            let ticketPrice = price ? +price : 350; 
+            const TOTAL_SEATS = 48;
+            const storageKeyPrefix = "bookedSeats_"; 
+            
+           
+            const movieTitleEl = document.getElementById('movieTitle');
+            const movieTimeDisplayEl = document.getElementById('movieTimeDisplay');
+            const seatContainer = document.getElementById('seatContainer');
+            const count = document.getElementById('count');
+            const total = document.getElementById('total');
+            const bookBtn = document.getElementById('bookBtn');
+            const priceDisplayEl = document.getElementById('ticketPriceDisplay');
+
+            function initializeSeatArea() {
+                if (movieTitleEl) movieTitleEl.innerText = `${movieName}`;
+                if (movieTimeDisplayEl) movieTimeDisplayEl.innerText = `Time: ${movieTime}`;
+                if (priceDisplayEl) priceDisplayEl.innerText = ticketPrice;
+                updateSelectedCount(); 
+                renderSeats();
+            }
+
+            function getBookedSeatsKey() {
+                return `${storageKeyPrefix}${movieName}_${movieTime}`;
+            }
+
+            function renderSeats() {
+                const bookedIndexes = JSON.parse(localStorage.getItem(getBookedSeatsKey())) || [];
+                if (seatContainer) {
+                    seatContainer.innerHTML = '';
+                    
+                    for (let i = 0; i < TOTAL_SEATS; i++) {
+                        const seat = document.createElement('div');
+                        seat.classList.add('seat');
+                        seat.setAttribute('data-index', i);
+
+                        if (bookedIndexes.includes(i)) {
+                            seat.classList.add('occupied');
+                        }
+                        
+                        seatContainer.appendChild(seat);
+                    }
+                }
+            }
+            
+            function updateSelectedCount() {
+                if (seatContainer) {
+                    const selectedSeats = seatContainer.querySelectorAll('.seat.selected');
+                    const selectedSeatsCount = selectedSeats.length;
+                    if (count) count.innerText = selectedSeatsCount;
+                    if (total) total.innerText = selectedSeatsCount * ticketPrice;
+                }
+            }
+
+            if (seatContainer) {
+                seatContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('seat') && 
+                        !e.target.classList.contains('occupied')) {
+                        e.target.classList.toggle('selected');
+                        updateSelectedCount();
+                    }
+                });
+            }
+
+            if (bookBtn) {
+                bookBtn.addEventListener('click', () => {
+                    const selectedSeats = document.querySelectorAll('#seatContainer .seat.selected');
+                    const numSeats = selectedSeats.length;
+
+                    if (numSeats === 0) {
+                        alert('Please select at least one seat before booking!');
+                        return;
+                    }
+                    
+                    const totalPrice = numSeats * ticketPrice;
+                    const allSeats = document.querySelectorAll('#seatContainer .seat');
+                    
+                    const newlySelectedIndices = [];
+                    selectedSeats.forEach((seat) => {
+                        const seatIndex = [...allSeats].indexOf(seat);
+                        newlySelectedIndices.push(seatIndex);
+                    });
+
+                    const bookingDataToSend = {
+                        user: signedInUser,
+                        movie: movieName,
+                        screening_time: movieTime, 
+                        seats_count: numSeats, 
+                        total: totalPrice,
+                        seats_indices: JSON.stringify(newlySelectedIndices)
+                    };
+
+                    fetch('http://localhost:3000/api/book', { 
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams(bookingDataToSend).toString()
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { 
+                                throw new Error(err.message || 'Server error during booking.'); 
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+
+                            selectedSeats.forEach(seat => {
+                                seat.classList.add('occupied'); 
+                                seat.classList.remove('selected'); 
+                            });
+                            updateSelectedCount(); 
+
+                            const bookedKey = getBookedSeatsKey();
+                            let bookedIndexes = JSON.parse(localStorage.getItem(bookedKey)) || [];
+                            bookedIndexes = bookedIndexes.concat(newlySelectedIndices);
+                            localStorage.setItem(bookedKey, JSON.stringify(bookedIndexes));
+
+                            const bookingDetailsForCancel = {
+                                movie: movieName,
+                                time: movieTime,
+                                seats: numSeats,
+                                total: totalPrice,
+                                pricePerSeat: ticketPrice,
+                                user: signedInUser,
+                                booking_id: data.booking_id
+                            };
+                            localStorage.setItem('lastBooking', JSON.stringify(bookingDetailsForCancel)); 
+                            
+                            window.location.href = 'confirmation.html';
+
+                        } else {
+                            alert('Booking failed to save to the database: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Network or Fetch error:', error);
+                        alert('An unexpected error occurred during booking. Error: ' + error.message);
+                    });
+                });
+            }
+
+            initializeSeatArea();
+        });
+    </script>
+</body>
+</html>

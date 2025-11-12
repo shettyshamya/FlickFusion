@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <title>Show Timings - FlickFusion</title>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="logo.png"></div>
+        <div class="header-right"><input type="text" placeholder="Find movie"></div>
+        <button class="btn-signin"><a href="index.html">Home</a></button>
+    </header>
+
+    <main class="booking-page-content">
+        <h1 id="movieTitle">Select Show Time</h1>
+        
+        <div id="timeSelectionArea" style="text-align: center; margin-top: 50px;">
+            <p style="color: white; font-size: 1.1em; margin-bottom: 20px;">Choose a screening time:</p>
+            </div>
+    </main>
+
+    <footer>
+        <div class="Quick-links">Quick Links
+            <a href="about.html">About Us</a>
+        </div>
+        <div class="social-links">Social Links
+            <a href="https://www.instagram.com/flick_fusion2025?utm_source=qr&igsh=bXlqdjc3a3g5Nnd2">Instagram</a>
+        </div>
+        <p>&copy; 2020 FlickFusion.All rights reserved</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieName = decodeURIComponent(urlParams.get('movie')) || 'Selected Movie'; 
+            const price = urlParams.get('price');
+            const signedInUser = localStorage.getItem('signedInUser');
+
+            const movieTitleEl = document.getElementById('movieTitle');
+            const timeSelectionArea = document.getElementById('timeSelectionArea');
+            
+            // --- Sign-in check ---
+            if (!signedInUser) {
+                console.warn('User not signed in. Booking functionality may be limited.');
+            }
+
+            const AVAILABLE_TIMES = ["10:00 AM", "01:30 PM", "06:00 PM", "09:30 PM"];
+
+            function renderTimeSelection() {
+                movieTitleEl.innerText = `Show Times for: ${movieName}`;
+
+                timeSelectionArea.innerHTML += AVAILABLE_TIMES.map(time => 
+                   ` <button class="time-btn" data-time="${time}">${time}</button>`
+                ).join('');
+
+                timeSelectionArea.querySelectorAll('.time-btn').forEach(button => {
+                    button.addEventListener('click', handleTimeSelection);
+                });
+            }
+            
+            function handleTimeSelection(e) {
+                const movieTime = e.target.getAttribute('data-time');
+                window.location.href = `booking.html?movie=${encodeURIComponent(movieName)}&price=${price}&time=${encodeURIComponent(movieTime)}`;
+            }
+
+            renderTimeSelection();
+        });
+    </script>
+</body>
+</html>

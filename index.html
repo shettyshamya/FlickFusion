@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>FlickFusion</title>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="logo.png"></div>
+        <div class="header-right">
+            <input type="text" id="movieSearchInput" placeholder="Find movie">
+        </div>
+        
+        <button id="reviewBookingBtn" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; display: none; margin-right: 10px;">
+            Review Last Booking
+        </button>
+        
+        <button id="cancelBookingBtn" style="padding: 10px 15px; background-color: #ff3333; color: white; border: none; border-radius: 5px; cursor: pointer; display: none; margin-right: 10px;">
+            Cancel Last Booking
+        </button>
+        
+        <button class="btn-signin" id="authButton"><a href="signin.html">Sign-In</a></button>
+    </header>
+    
+    <main>
+        <h1 id="welcomeGreeting" class="page-title">Welcome to FlickFusion!</h1>
+        <p id="noResultsMessage" style="color: white; font-size: 1.5em; text-align: center; margin-top: 30px; display: none;">
+            Sorry, no movies found matching your search. 
+        </p>
+        
+        <section class="movie-section">
+            <h2>NOW PLAYING</h2>
+            <div class="movie-card-container">
+            
+                <a href="timings.html?movie=KANTARA:CHAPTER 1&price=350" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="kantara.jpg" alt="KANTARA:CHAPTER 1">
+                        <div class="card-info">
+                            <span class="movie-title">KANTARA:CHAPTER 1</span>
+                            <span>9.3/10</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="timings.html?movie=DUDE&price=350" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="dude.jpg" alt="DUDE">
+                        <div class="card-info">
+                            <span class="movie-title">DUDE</span>
+                            <span>7.9/10</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="timings.html?movie=DEMON SLAYER&price=350" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="demonslayer.jpg" alt="DEMON SLAYER">
+                        <div class="card-info">
+                            <span class="movie-title">DEMON SLAYER</span>
+                            <span>9.5/10</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="timings.html?movie=LOKAH&price=350" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="lokah.jpg" alt="LOKAH">
+                        <div class="card-info">
+                            <span class="movie-title">LOKAH</span>
+                            <span>9.2/10</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="timings.html?movie=KAANTHA&price=150" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="kaantha.jpg" alt="KAANTHA">
+                        <div class="card-info">
+                            <span class="movie-title">KAANTHA</span>
+                            <span>9.5/10</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="timings.html?movie=F1: THE MOVIE&price=150" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="f1.jpg" alt="F1: THE MOVIE">
+                        <div class="card-info">
+                            <span class="movie-title">F1: THE MOVIE</span>
+                            <span>9.5/10</span>
+                        </div>
+                    </div>
+                </a>
+
+                
+                <a href="timings.html?movie=HAQ&price=150" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="haq.jpg" alt="HAQ">
+                        <div class="card-info">
+                            <span class="movie-title">HAQ</span>
+                            <span>8.9/10</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="timings.html?movie=JAI&price=150" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="jai.jpg" alt="JAI">
+                        <div class="card-info">
+                            <span class="movie-title">JAI</span>
+                            <span>8.9/10</span>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="timings.html?movie=BRAT&price=150" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="brat.jpg" alt="BRAT">
+                        <div class="card-info">
+                            <span class="movie-title">BRAT</span>
+                            <span>9/10</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="timings.html?movie=PREDATOR: BADLANDS&price=150" class="movie-card-link">
+                    <div class="movie-card">
+                        <img src="predator.jpg" alt="PREDATOR: BADLANDS">
+                        <div class="card-info">
+                            <span class="movie-title">PREDATOR: BADLANDS</span>
+                            <span>8.7/10</span>
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="Quick-links">Quick Links
+            <a href="about.html">About Us</a>
+        </div>
+        <div class="social-links">Social Links
+            <a href="https://www.instagram.com/flick_fusion2025?utm_source=qr&igsh=bXlqdjc3a3g5Nnd2">Instagram</a>
+        </div>
+        <p>&copy; 2020 FlickFusion.All rights reserved</p>
+    </footer>
+    
+    <script>
+ 
+        const welcomeEl = document.getElementById('welcomeGreeting');
+        const authButton = document.getElementById('authButton');
+        const userName = localStorage.getItem('signedInUser'); 
+        const cancelBtn = document.getElementById('cancelBookingBtn');
+        const reviewBtn = document.getElementById('reviewBookingBtn'); 
+        const lastBooking = localStorage.getItem('lastBooking');
+
+        // --- Sign In / Sign Out Logic ---
+        if (userName) {
+            welcomeEl.textContent = `Hello, ${userName}!`;
+            authButton.querySelector('a').textContent = 'Sign Out';
+            authButton.querySelector('a').href = '#'; 
+            authButton.onclick = function() {
+                localStorage.removeItem('signedInUser');
+                window.location.reload();
+            };
+        } else {
+            welcomeEl.textContent = 'Welcome to FlickFusion!'; 
+            authButton.querySelector('a').textContent = 'Sign-In';
+            authButton.querySelector('a').href = 'signin.html';
+            authButton.onclick = null;
+        }
+
+        // --- USER CANCELLATION---
+        if (lastBooking && userName) {
+            const bookingData = JSON.parse(lastBooking);
+            const bookedByUser = bookingData.user;
+            
+            if (userName === bookedByUser) {
+                cancelBtn.style.display = 'inline-block';
+                reviewBtn.style.display = 'inline-block'; 
+                
+                reviewBtn.onclick = function() {
+                    window.location.href = 'confirmation.html';
+                };
+                
+                cancelBtn.onclick = function() {
+                    const movie = bookingData.movie;
+                    const time = bookingData.time; 
+                    const seatsBooked = bookingData.seats;
+                    const user = userName;
+                    
+                    if (!confirm(`Are you sure you want to cancel your ${seatsBooked} tickets for ${movie} at ${time}?`)) {
+                        return;
+                    }
+                    
+                    const cancellationDataToSend = { 
+                        movie: movie, 
+                        user: user,
+                        time: time 
+                    };
+
+                    fetch('http://localhost:3000/api/cancel', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams(cancellationDataToSend).toString()
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { throw new Error(err.message || 'Server error during cancellation.'); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Cancellation successful! Your seats are now released.');
+                            localStorage.removeItem('lastBooking');
+                            localStorage.removeItem(`bookedSeats_${movie}_${time}`); 
+                            window.location.reload();
+                        } else {
+                            alert('Cancellation failed: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Cancellation error:', error);
+                        alert('An unexpected network or server error occurred during cancellation.');
+                    });
+                };
+            }
+        }
+
+        // --- MOVIE SEARCH IMPLEMENTATION ---
+        const searchInput = document.getElementById('movieSearchInput');
+        const movieCards = document.querySelectorAll('a.movie-card-link'); 
+        const noResultsMessage = document.getElementById('noResultsMessage'); 
+        const movieSectionHeading = document.querySelector('.movie-section h2'); 
+        const movieCardContainer = document.querySelector('.movie-card-container'); 
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = searchInput.value.toLowerCase(); 
+            let visibleCount = 0;
+
+            movieCards.forEach(movieLink => {
+                const titleElement = movieLink.querySelector('.movie-title');
+                
+                if (titleElement) {
+                    const movieTitle = titleElement.textContent.toLowerCase();
+
+                    if (movieTitle.includes(searchTerm)) {
+                        movieLink.style.display = 'block'; 
+                        visibleCount++;
+                    } else {
+                        movieLink.style.display = 'none';
+                    }
+                }
+            });
+            
+            if (searchTerm.length > 0) {
+                if (visibleCount === 0) {
+                    movieSectionHeading.style.display = 'none';
+                    movieCardContainer.style.display = 'none';
+                    noResultsMessage.style.display = 'block'; 
+                } else {
+                    movieSectionHeading.style.display = 'block';
+                    movieCardContainer.style.display = 'flex'; 
+                    noResultsMessage.style.display = 'none'; 
+                }
+            } else {
+                movieSectionHeading.style.display = 'block';
+                movieCardContainer.style.display = 'flex'; 
+                noResultsMessage.style.display = 'none'; 
+            }
+        });
+    </script>
+</body>
+</html>

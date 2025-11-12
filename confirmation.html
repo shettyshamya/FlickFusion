@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation - FlickFusion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="logo.png"></div>
+        <div class="header-right"><input type="text" placeholder="Find movie"></div>
+        <button class="btn-signin"><a href="index.html">Home</a></button>
+    </header>
+
+    <main class="form-page">
+        <div class="confirmation-page-content">
+            <h2 id="confirmationHeading"></h2>
+            <p id="confirmationMessage"></p>
+            
+            <div id="bookingSummary">
+                </div>
+
+            <a href="index.html" class="back-btn">Return to Home</a>
+        </div>
+    </main>
+    
+    <footer>
+       <div class="Quick-links">Quick Links
+            <a href="about.html">About Us</a>
+        </div>
+        <div class="social-links">Social Links
+            <a href="https://www.instagram.com/flick_fusion2025?utm_source=qr&igsh=bXlqdjc3a3g5Nnd2">Instagram</a>
+        </div>
+        <p>&copy; 2020 FlickFusion.All rights reserved</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const heading = document.getElementById('confirmationHeading');
+            const message = document.getElementById('confirmationMessage');
+            const summaryDiv = document.getElementById('bookingSummary');
+            const lastBooking = localStorage.getItem('lastBooking');
+
+            if (lastBooking) {
+                const booking = JSON.parse(lastBooking);
+                
+                heading.innerText = '🎉 Booking Confirmed!';
+                message.innerText = 'Thank you for your purchase. Here are your booking details:';
+            
+                summaryDiv.innerHTML = `
+                    <p class="summary-detail">Movie: <strong>${booking.movie}</strong></p>
+                    <p class="summary-detail">Tickets Booked: <strong>${booking.seats}</strong></p>
+                    <p class="summary-detail">Price per Ticket: <strong>₹${booking.pricePerSeat}</strong></p>
+                    <p class="summary-detail">Total Amount Paid: <strong>₹${booking.total}</strong></p>
+                    <p class="summary-detail">Movie Time:<strong>${booking.time}</strong></p>
+                `;
+
+            } else {
+                heading.innerText = '⚠ No Recent Booking Found';
+                message.innerText = 'The details for your last transaction could not be loaded, or the booking may have been cancelled.';
+                summaryDiv.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
